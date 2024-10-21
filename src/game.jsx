@@ -15,41 +15,42 @@ function game() {
   const audioRef = useRef()
 
   const checkScore = (obj) => {
+    console.log(obj);
 
-    (obj.player1 + obj.player2) !== 25 ? (() => {
-      if (obj.player1 >= 15) {
-        setwinner(1)
-        setisGameOver(true)
-        console.log("player1 Wins")
+    if ((obj.player1 + obj.player2) !== 25) {
+      if (obj.player1 >= 10) {
+        setwinner(1);
+        setisGameOver(true);
+        console.log("player1 Wins");
       }
 
-      if (obj.player2 >= 15) {
-        setwinner(2)
-        setisGameOver(true)
-        console.log("player2 wins")
+      if (obj.player2 >= 10) {
+        setwinner(2);
+        setisGameOver(true);
+        console.log("player2 wins");
       }
-    }) :
-      (() => {
-        obj.player1 > obj.player2 ? (() => {
-          console.log("player 2 wins")
-          setwinner(1)
-          setisGameOver(true)
-        })() : (() => {
-          setwinner(1)
-          setisGameOver(true)
-          console.log("player 2 wins")
-        })()
-      })()
+    } else {
+      if (obj.player1 > obj.player2) {
+        console.log("player 1 wins");
+        setwinner(1);
+        setisGameOver(true);
+      } else {
+        setwinner(2);
+        setisGameOver(true);
+        console.log("player 2 wins");
+      }
+    }
   }
 
   const changeRecords = (owner, change) => {
     const obj = records
     change === "plus" ?
-      owner === "1" ? obj.player1++ : obj.player2++ :
+      owner === "1" ? obj.player1++ : obj.player2++
+      :
       owner === "1" ? obj.player1-- : obj.player2--
-    console.log(obj)
-    setrecords(obj)
+
     checkScore(obj)
+    setrecords(obj)
   }
 
   const playAudio = () => {
@@ -222,7 +223,7 @@ function game() {
 
   }, [])
 
-  console.log(records)
+  console.log(isGameOver, winner)
 
   return (
     <>
@@ -232,10 +233,10 @@ function game() {
       </audio>
 
       <div className="bg-gradient-to-r from-purple-400 to-blue-500 min-h-screen flex flex-col items-center justify-center">
-        <div className="promts text-black text-3xl py-2 px-1 m-2 font-semibold text-center">
+        {!isGameOver && winner === 0 && <div className="promts text-black text-3xl py-2 px-1 m-2 font-semibold text-center">
           Enter the Start button Below
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg cursor-default">
+        </div>}
+        {!isGameOver && winner === 0 && <div className="bg-white p-6 rounded-lg shadow-lg cursor-default">
           <div>
             <div className="row flex justify-center items-center" id="0">
               <div id="00" owner="null" particle={0} className='col text-3xl font-semibold flex justify-center items-center  max-w-[100px] max-h-[100px] min-w-[60px] min-h-[60px] bg-red-300 border-2 border-blue-700 transition-transform transform hover:scale-105'></div>
@@ -283,10 +284,11 @@ function game() {
               </button>
             </div>
           </div>
-        </div>
+        </div>}
+        {isGameOver && winner !== 0 && <Result winner={winner} />}
       </div>
 
-      {isGameOver && winner!==0 && <Result winner={winner}/>}
+
 
     </>
   )

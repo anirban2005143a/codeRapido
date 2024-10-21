@@ -223,7 +223,7 @@ function game() {
 
   }, [])
 
-  console.log(isGameOver, winner)
+  // console.log(isGameOver, winner)
 
   return (
     <>

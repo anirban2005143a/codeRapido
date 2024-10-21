@@ -10,7 +10,7 @@ const LandingPage = () => {
     const navigate = useNavigate()
 
     const startPlaying= ()=>{
-        navigate("/form")
+        navigate("/game")
     }
 
     return (

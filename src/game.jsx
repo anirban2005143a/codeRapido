@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import Result from './result'
 
 function game() {
 
@@ -8,22 +9,37 @@ function game() {
     player2: 0,
   })
 
+  const [isGameOver, setisGameOver] = useState(false)
+  const [winner, setwinner] = useState(0)
+
   const audioRef = useRef()
 
   const checkScore = (obj) => {
 
     (obj.player1 + obj.player2) !== 25 ? (() => {
       if (obj.player1 >= 15) {
+        setwinner(1)
+        setisGameOver(true)
         console.log("player1 Wins")
       }
 
       if (obj.player2 >= 15) {
+        setwinner(2)
+        setisGameOver(true)
         console.log("player2 wins")
       }
-    }) : (() => {
-      obj.player1 > obj.player2 ? console.log("player1 wins") : console.log("player 2 wins")
-    })()
-
+    }) :
+      (() => {
+        obj.player1 > obj.player2 ? (() => {
+          console.log("player 2 wins")
+          setwinner(1)
+          setisGameOver(true)
+        })() : (() => {
+          setwinner(1)
+          setisGameOver(true)
+          console.log("player 2 wins")
+        })()
+      })()
   }
 
   const changeRecords = (owner, change) => {
@@ -100,8 +116,8 @@ function game() {
 
     curr.setAttribute("particle", "0")
     curr.setAttribute("owner", "null")
-    displayParticle(row,col,"0" , null)
-    
+    displayParticle(row, col, "0", null)
+
     changeRecords(`${prevowner}`, "minus")
 
     row + 1 <= 4 ? addNumber(prevowner, row + 1, col) : ""
@@ -269,6 +285,9 @@ function game() {
           </div>
         </div>
       </div>
+
+      {isGameOver && winner!==0 && <Result winner={winner}/>}
+
     </>
   )
 }

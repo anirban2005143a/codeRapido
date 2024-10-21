@@ -1,10 +1,12 @@
 import React, { useState, useEffect , useRef } from 'react'
 import io from "socket.io-client";
+import { useNavigate } from 'react-router-dom';
 
-const form = (props) => {
+const Form = (props) => {
 
     const backendUrl = import.meta.env.VITE_REACT_BACKEND_URL
     const socketref = useRef()
+    const navigate = useNavigate()
 
     const [isloading, setisloading] = useState(false)
 
@@ -18,6 +20,7 @@ const form = (props) => {
             setisloading(false)
             localStorage.setItem("isJoined" , 'true')
             props.setuser(data.participants) 
+            navigate("/game")
         })
     }, [])
 
@@ -63,4 +66,4 @@ const form = (props) => {
     )
 }
 
-export default form
+export default Form
